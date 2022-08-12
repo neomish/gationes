@@ -1,0 +1,300 @@
+#!/bin/bash -i
+
+#GPL y toda la vaina esa, esto es para la gente, ¡LLÉVÁTELO!
+
+# Trucazo para comparación de un [enter]... no me furuló :/
+# IFS=
+
+L="\e[0m"          # Limpio
+
+# Vector loco con atributos... para otro progrma perdón pero reciclo
+atributos[0]="n"   #normal
+atributos[1]="c"   #claro
+atributos[2]="npi" #Ni Puta Idea
+atributos[3]="l"   #inclinado
+atributos[4]="s"   #subrallado
+atributos[5]="p"   #parpadeante
+atributos[6]="sec" #Sepa El Culo
+atributos[7]="i"   #invertido
+
+# Vector loco con atributos... para otro progrma perdón pero reciclo
+fondos[0]="T"   #normaloTe
+fondos[40]="N"  #Negro
+fondos[41]="R"  #Rojo
+fondos[42]="V"  #Verde
+fondos[43]="J"  #naranJa
+fondos[44]="Z"  #aZul
+fondos[45]="M"  #Magenta
+fondos[46]="C"  #Cyan
+fondos[47]="G"  #Gris
+fondos[100]="F" #graFito
+fondos[101]="S" #Salmón
+fondos[102]="L" #Limón
+fondos[103]="A" #Amarillo
+fondos[104]="I" #Índigo
+fondos[105]="D" #rosaDo
+fondos[106]="Q" #aQua
+fondos[107]="B" #Blanco
+
+# Vector loco con atributos... para otro progrma perdón pero reciclo
+frentes[0]="T"  #normaloTe
+frentes[30]="N" #Negro
+frentes[31]="R" #Rojo
+frentes[32]="V" #Verde
+frentes[33]="J" #naranJa
+frentes[34]="Z" #aZul
+frentes[35]="M" #Magenta
+frentes[36]="C" #Cyan
+frentes[37]="G" #Gris
+frentes[90]="T" #grafiTo
+frentes[91]="S" #Salmón
+frentes[92]="L" #Limón
+frentes[93]="A" #Amarillo
+frentes[94]="I" #Índigo
+frentes[95]="D" #rosaDo
+frentes[96]="Q" #aQua
+frentes[97]="B" #Blanco
+
+# Vector loco con atributos... que si nació para este programa
+valores[0]="$(whoami)"   #\u
+valores[1]="$(hostname)" #\h
+valores[2]="$(pwd)"      #\w
+valores[3]="$"           #\$
+valores[4]="_"           #Puto espacio
+
+# De acá agregar lo que les ronque...
+i=5
+LISTA="@{}()[]◢◣◥◤«»◀▶☰Ξ🔒╭╮╰╯┌┐└┘─│├┤┼┬┴◠◡◜◝◟◞▒"
+while read -n1 C; do
+  valores[$i]="${C}"
+  i=$[ $i + 1 ]
+done < <(echo -n "$LISTA")
+
+#Siempre poner el enter al jodido final
+valores[$i]="\n"
+
+# No se como se usa una matriz :/
+matriz[0]="valores"
+matriz[1]=${!valores[@]}
+matriz[2]=${valores[@]}
+matriz[3]=0
+matriz[4]="frentes"
+matriz[5]=${!frentes[@]}
+matriz[6]=${frentes[@]}
+matriz[7]=0
+matriz[8]="fondos"
+matriz[9]=${!fondos[@]}
+matriz[10]=${fondos[@]}
+matriz[11]=0
+matriz[12]="atributos"
+matriz[13]=${!atributos[@]}
+matriz[14]=${atributos[@]}
+matriz[15]=0
+
+AYUDA="
+[h] para mostrar este texto
+[Cursoras Arriba y Abajo] Alernan los contextos
+[Cursoras Izquierda y Derecha] Alernan los valores
+[a] añadir valor en el prompt
+[q] quitar valor en el prompt
+[r] regresar
+[s] para salir
+"
+
+#echo "$AYUDA"
+
+R="\e[7;40;97m"
+S="${L}----------------------------------------"
+
+imatriz=0
+jmatriz=0
+actuar=1
+
+atributo=0
+fondo=0
+frente=0
+
+iprompt=0
+
+#while true ; do
+while [[ $actuar -ne 3 ]] ; do
+
+  if [[ $actuar -eq 1 ]] ; then
+    actuar=0
+    clear
+    vector1="${matriz[$imatriz]}"
+    vector2=(${matriz[$[ $imatriz + 1 ]]})
+    vector3=(${matriz[$[ $imatriz + 2 ]]})
+
+    if [[ jmatriz -eq ${#vector2[@]} ]] ; then
+      jmatriz=0
+    fi
+
+    if [[ jmatriz -eq -1 ]] ; then
+      jmatriz=$[ ${#vector2[@]} - 1 ]
+    fi
+
+    #echo "matriz            > ${matriz[@]}"
+    #echo "Elementos matriz  > ${#matriz[@]}"
+    #echo "imatriz           > $imatriz"
+    #echo "jmatriz           > $jmatriz"
+    #echo "vector1           > ${vector1[@]}"
+    #echo "vector2           > ${vector2[@]}"
+    #echo "Elementos vector2 > ${#vector2[@]}"
+    #echo "valor vector2     > ${vector2[jmatriz]}"
+    #echo "vector3           > ${vector3[@]}"
+    #echo "Elementos vector3 > ${#vector3[@]}"
+    #echo "valor vector3     > ${vector3[jmatriz]}"
+    #echo "iprompt           > $iprompt"
+
+    case ${vector1[@]} in
+      "valores")
+        menu="${R}[Valor]${L}[Atributo][Fondo][Frente]"
+        texto1=${vector3[jmatriz]}
+        case $jmatriz in
+          0)
+            texto2="\u"
+          ;;
+          1)
+            texto2="\h"
+          ;;
+          2)
+            texto2="\w"
+          ;;
+          3)
+            texto2="\\$"
+          ;;
+          4)
+            texto1=" "
+            texto2=" "
+          ;;
+          *)
+            texto2=$texto1
+          ;;
+        esac
+      ;;
+      "atributos")
+        menu="[Valor]${R}[Atributo]${L}[Fondo][Frente]"
+        atributo=${vector2[jmatriz]}
+      ;;
+      "fondos")
+        menu="[Valor][Atributo]${R}[Fondo]${L}[Frente]"
+        fondo=${vector2[jmatriz]}
+      ;;
+      "frentes")
+        menu="[Valor][Atributo][Fondo]${R}[Frente]${L}"
+        frente=${vector2[jmatriz]}
+      ;;
+    esac
+
+
+    color1="\e[${atributo};${fondo};${frente}m"
+    color2="\\[\\e[${atributo};${fondo};${frente}m\\]"
+
+    prompt1[$iprompt]="${color1}${texto1}"
+    prompt2[$iprompt]="${color2}${texto2}"
+
+    if [ "${texto2}" = "\n" ] ; then
+      T="↵"
+    else
+      T="${texto2}"
+    fi
+
+    echo -e "${menu} - [${T}]"
+    #echo "${vector1[@]}"
+    echo -e "${S}"
+
+    #echo -e "${color1}${texto1}"
+    for i in "${!prompt1[@]}" ; do
+      echo -en "${prompt1[$i]}"
+    done
+    echo -e "${L}"
+    echo -e "${S}"
+    #echo  "${color2}${texto2}${L}\]"
+    PROMPT=""
+    for i in "${!prompt2[@]}" ; do
+      #echo -n "${prompt2[$i]}"
+      PROMPT="${PROMPT}${prompt2[$i]}"
+    done
+    #echo "${L}\]"
+    PROMPT="${PROMPT}\\[${L}\]"
+    echo "PS1=\"${PROMPT}\""
+    echo -e "${S}"
+    echo "[a]Agregar [q]Quitar [h]Ayuda"
+  fi
+
+  read -r -sn1 tecla
+  # A-Arriba B-Abajo C-Derecha D-Izquierda
+
+  case $tecla in
+    D)
+      actuar=1
+      matriz[$[ $imatriz + 3 ]]=$jmatriz
+      imatriz=$[ imatriz + 4 ]
+
+      if [[ $imatriz -eq ${#matriz[@]} ]] ; then
+        imatriz=0
+      fi
+
+      jmatriz=${matriz[$[ $imatriz + 3 ]]}
+    ;;
+    C)
+      actuar=1
+      matriz[$[ $imatriz + 3 ]]=$jmatriz
+      imatriz=$[ imatriz - 4 ]
+
+      if [[ $imatriz -eq -4 ]] ; then
+        imatriz=$[ ${#matriz[@]} - 4 ]
+      fi
+
+      jmatriz=${matriz[$[ $imatriz + 3 ]]}
+    ;;
+    B)
+      actuar=1
+      jmatriz=$[ jmatriz + 1 ]
+    ;;
+    A)
+      actuar=1
+      jmatriz=$[ jmatriz - 1 ]
+    ;;
+    "s")
+      actuar=3
+      echo -e "${R}Saliendo...${L}"
+      sleep 0.3s
+      clear
+    ;;
+    "a")
+      echo -e "${R}Añadiendo...${L}"
+      sleep 0.3s
+      actuar=1
+      iprompt=$[ $iprompt + 1 ]
+    ;;
+    "q")
+      if [ $iprompt -ne 0 ] ; then
+        echo "${R}Quitando...${L}"
+        sleep 0.3s
+        actuar=1
+        unset prompt1[$iprompt]
+        unset prompt2[$iprompt]
+        iprompt=$[ $iprompt - 1 ]
+      fi
+    ;;
+    "r")
+      actuar=1
+    ;;
+    "h")
+      clear
+      echo "$AYUDA"
+    ;;
+  esac
+done
+
+# generando el desvergue
+PS1="${PROMPT}"
+
+# esto le vale tres llardas de verga
+export PS1="${PS1}"
+
+# por lo menos se imprime la mierda
+echo "PS1=\"${PROMPT}\""
+#exit

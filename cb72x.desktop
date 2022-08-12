@@ -1,0 +1,32 @@
+#version 1.0
+#contact: neomish@gmail.com
+#based on script of piotr4@gmail.com
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/x-cb7;
+Actions=cb72cbr;cb72cbz;cb72pdf;cb72jpg;
+X-KDE-Submenu=Convertir
+X-KDE-StartupNotify=false
+X-KDE-Priority=TopLevel
+#InitialPreference=5
+
+[Desktop Action cb72cbr]
+Name=Convertir a CBR
+Icon=application-x-cbr
+Exec=cb2x.sh r "%u"
+
+[Desktop Action cb72cbz]
+Name=Convertir a CBZ
+Icon=application-x-cbz
+Exec=cb2x.sh z "%u"
+
+[Desktop Action cb72pdf]
+Name=Convertir a PDF
+Icon=application-pdf
+Exec=cb2x.sh p "%u"
+
+[Desktop Action cb72jpg]
+Name=Convertir a JPG
+Icon=application-image-jpg
+Exec=cb2x.sh j "%u"

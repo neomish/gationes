@@ -1,0 +1,32 @@
+#version 1.0
+#contact: neomish@gmail.com
+#based on script of piotr4@gmail.com
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/vnd.comicbook+zip;
+Actions=cbz2cbr;cbz2cb7;cbz2pdf;cbz2jpg;
+X-KDE-Submenu=Convertir
+X-KDE-StartupNotify=false
+X-KDE-Priority=TopLevel
+#InitialPreference=5
+
+[Desktop Action cbz2cbr]
+Name=Convertir a CBR
+Icon=application-x-cbr
+Exec=cb2x.sh r "%u"
+
+[Desktop Action cbz2cb7]
+Name=Convertir a CB7
+Icon=application-x-cb7
+Exec=cb2x.sh 7 "%u"
+
+[Desktop Action cbz2pdf]
+Name=Convertir a PDF
+Icon=application-pdf
+Exec=cb2x.sh p "%u"
+
+[Desktop Action cbz2jpg]
+Name=Convertir a JPG
+Icon=application-image-jpg
+Exec=cb2x.sh j "%u"
